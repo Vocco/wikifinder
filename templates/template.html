@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Wikipedia Source Search Report</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" media="screen">
+  
+    <style type="text/css">
+      .container {
+        margin: 1em 3em 0em 3em;
+        padding: 2em;
+        padding-top: 0em;
+        max-width: 100%;
+        align: center;
+    	border-color: #555555;
+    	background-color: #dddddd;
+    	box-shadow: 2px 2px #cccccc;
+      }
+      
+      .header {
+        background-color: #42a5f5;
+        padding: 5px 0px 10px 25px;
+        color: #ffffff; 
+        font-weight: bold;
+        box-shadow: 0px 2px #dddddd;
+      }
+      
+      .btn-article {
+        color: #0077c2;
+        font-weight: bold;
+        border-style: none;
+        padding: 0.75em;
+        text-transform: uppercase;
+        background-color: #dddddd;
+      }
+      .btn-article:active {
+        color: #ffffff;
+      }
+      .btn-article:focus {
+        color:#003300;
+        outline: 0;
+      }
+      
+      .claim-container {
+        margin: 0.75em 2em;
+        padding: 0.75em;
+        background-color: #eeeeee;
+        box-shadow: 2px 2px #cccccc;
+      }
+      .claim-heading {
+        font-weight: bold;
+        color: #26c6da;
+      }
+      .claim-text {
+        font-weight: bold;
+      }
+      .claims-all-container {
+        background-color: #ffffff;
+        padding: 1em;
+      }
+      .claim-source-all-container {
+        border-bottom: solid;
+        border-color: #dddddd;
+        border-width: 1px;
+      }
+      .claim-source-one-container {
+        margin: 1em;
+        padding: 1em;
+        border-color: #dddddd;
+        border-style: solid;
+        border-width: 1px;
+      }
+      
+      .source-title {
+        font-size: 2.5em;
+      }
+      .source-snippet {
+        margin: 1em;
+        font-style: italic;
+      }
+      
+      .js-copytextarea {
+        width: 50%;
+        height: 1.75em;
+      }
+    </style>
+  </head>
+  
+  <body>
+  
+  	<div class="header">
+  	  <h1>Wikipedia Source Search Report</h1>
+  	</div>
+  
+    <div class="container">
+    
+	  <h2 style="color: #26c6da;">Articles searched</h2>
+	  	
+	  {% for article in articles %}
+	  <button type="button" class="btn-article" onclick='toggle("{{article.article_id}}")'>
+	    {{article.article_title}}
+	  </button>
+	  <p></p>
+	    
+	  <div id="{{article.article_id}}" class="claim-container" style="display:none">
+	      
+	    <a href='{{base_url}}/wiki?curid={{article.article_id}}'>
+	      <p class='wiki-link'> >> Go to the original Wikipedia article</p>
+	    </a>
+	    
+	    
+	    
+	    <h4 class="claim-heading">Claims found in the article:</h4>
+	    
+	    {% for claim in article.claims %}
+	    <div class="claims-all-container">  
+	      <p class="claim-text">"{{claim.claim_text}}"</p>
+	        <a href={{claim.google_link}}>
+	          <p class='wiki-link'> >> Go to Google search results</p>
+	        </a>
+	      
+	      <button type="button" class="btn btn-default btn-sm display-source" onclick='toggle("{{claim.claim_id}}")'>
+	        <span class="glyphicon glyphicon-chevron-right"></span> Display sources
+	      </button>
+	        
+	      <div id="{{claim.claim_id}}" class="claim-source-all-container" style="display:none">
+	          
+	        {% for source in claim.valid_sites %}
+	          
+	        <div class="claim-source-one-container">
+	            
+	          <a href={{source[0]}}><p class="source-title">{{ source[1] }}</p></a>
+	          <p class="claim-text">Bing page snippet:</p>
+	          <p class="source-snippet">{{source[2]}}</p>
+	          <p class="claim-text">Similar text found:</p>
+	          <p class="source-snippet">{{source[3]}}</p>
+	          
+	          <p>
+                <button class="js-textareacopybtn" id="{{ claim.claim_id }}{{ source[0] }}" onClick="copyArea(this.id)" style="vertical-align:top;">Copy Source Template to Clipboard</button>
+                <textarea class="js-copytextarea" id="copyarea-{{ claim.claim_id }}{{ source[0] }}">&lt;ref&gt;&#123;&#123;cite web|url={{ source[0] }}|title= {{ source[1] }}&#125;&#125;&lt;/ref&gt;</textarea>
+              </p>
+	          
+	        </div>    
+	        {% endfor %}
+	      </div>
+	    </div>
+	    {% endfor %}
+	  </div>
+	  {% endfor %}
+    </div>
+  
+  	<script>
+	function toggle(div_id) {
+    	x = document.getElementById(div_id);
+    	if (x.style.display === 'none') {
+        	x.style.display = 'block';
+    	} else {
+        	x.style.display = 'none';
+    	}
+	}
+	
+	function copyArea(area_id) {
+	  an_id = "copyarea-" + area_id;
+	  console.log(an_id);
+	  var copyArea = document.getElementById(an_id);
+	  copyArea.select();
+
+      try {
+        var successful = document.execCommand('copy');
+      } catch (err) {
+        console.log('unable to copy');
+      }
+	};
+	
+	</script>
+  </body>
+</html>
