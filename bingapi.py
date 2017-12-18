@@ -177,7 +177,9 @@ class BingResponse(object):
         Returns:
             A Bing API query.
         """
-        query = keywords + " NOT (link:wikipedia.org OR site:wikipedia.org"
+        query = keywords + " NOT (link:wikipedia.org"
+	if 'wikipedia.org' not in ignored_sites:
+            query += 'OR site:wikipedia.org'
         length = len(query)
         for site in ignored_sites:
             append = " OR site:" + site
