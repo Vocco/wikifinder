@@ -16,7 +16,7 @@ WIKI_XML_DUMP is the exported dump of articles of your choice to process
 automatically, must be bz2-compressed
 
 CONFIG_FILE should first be created by running createwikidict.py and then
-updated with appropriate information (see README for more information)
+updated with appropriate information (see https://github.com/Vocco/wikifinder for more information)
 
 Example: python runfinder.py ~/path/to/chosen/articles.xml.bz2 ~/path/to/_wikifinder.cfg
 """
