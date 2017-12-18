@@ -185,7 +185,7 @@ class Claim(object):
             
             For claims that are of type "B", the weight is equal to:
                  
-                 x + 0.16 * y + 0.064 * z,
+                 x + 0.36 * y + 0.216 * z,
             
             where x = 1 if the token appears in the closest sentence to the
             [citation needed] template and 0 otherwise, y is the number of
@@ -195,7 +195,7 @@ class Claim(object):
             
             For claims that are of type "F", the weight is equal to:
             
-                x + 0.16 * y + 0.064 * z,
+                x + 0.36 * y + 0.216 * z,
             
             where x = 1 if the token appears in the closest sentence to the end
             of the claim and 0 otherwise, y is the number of occurrences of the
